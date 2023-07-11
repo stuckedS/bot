@@ -12,12 +12,12 @@ from pymongo.server_api import ServerApi
 
 
 myclient = pymongo.MongoClient(
-    "mongodb+srv://davidkus152003:qwerty213@cluster0.l7ryhjk.mongodb.net/?retryWrites=true&w=majority")
+    'secret_info')
 mydb = myclient["aeroport"]
 
 pip.main(['install', 'pytelegrambotapi'])
 pip.main(['install', 'openpyxl'])
-bot = telebot.TeleBot('6382740126:AAFIRgihWHDjRcQ5xjnVZoNvnHP2nPPK5GI')
+bot = telebot.TeleBot('secret_info')
 
 id_flight=''
 save = ''
