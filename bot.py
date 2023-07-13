@@ -41,7 +41,7 @@ def bilet(message):
     user_markup.row('Регистрация на рейс',
                     'Отменить рейс')
     user_markup.row(
-        'Места для регистрации негабаритного багажа')
+        'Зарегистрированные пассажиры')
     bot.send_message(
         message.chat.id, "Что вам нужно сделать?", reply_markup=user_markup)
 
@@ -72,9 +72,18 @@ def decline_flight(message):
                      reply_markup=registration_menu)
 
 
-@bot.message_handler(func=lambda message: message.text == 'Места для регистрации негабаритного багажа')
+@bot.message_handler(func=lambda message: message.text == 'Зарегистрированные пассажиры')
 def map_luggage(message):
-    bot.send_message(message.chat.id, "in progress")
+    reg_menu1 = types.ReplyKeyboardMarkup(True, True)
+    reg_menu1.row('Назад')
+    mycol = mydb["registration_on_flight"]
+    projection = {
+        "_id": 0
+    }
+    tablo =''
+    for x in mycol.find({}, projection):
+        tablo = ' | '+'Номер рейса '+str(x['Рейс'])+' '+str(x['Пассажиры'])
+        bot.send_message(message.chat.id, tablo,reply_markup=reg_menu1)
 
 
 @bot.message_handler(func=lambda message: message.text == 'Табло')
