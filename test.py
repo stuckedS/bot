@@ -1,11 +1,6 @@
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-uri = "secret_info"
+import datetime
 
-client = MongoClient(uri, server_api=ServerApi('1'))
-
-try:
-    client.admin.command('ping')
-    print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
+date = str(datetime.date.today())
+print(date)
+date = date[8]+date[9]+'/'+date[5]+date[6]+'/'+date[0]+date[1]+date[2]+date[3]
+print (date)

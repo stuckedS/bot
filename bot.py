@@ -9,15 +9,15 @@ import pymongo
 import json
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-
+import datetime
 
 myclient = pymongo.MongoClient(
-    'secret_info')
+    "mongodb+srv://davidkus152003:qwerty213@cluster0.l7ryhjk.mongodb.net/?retryWrites=true&w=majority")
 mydb = myclient["aeroport"]
 
 pip.main(['install', 'pytelegrambotapi'])
 pip.main(['install', 'openpyxl'])
-bot = telebot.TeleBot('secret_info')
+bot = telebot.TeleBot('6382740126:AAFIRgihWHDjRcQ5xjnVZoNvnHP2nPPK5GI')
 
 id_flight=''
 save = ''
@@ -53,7 +53,7 @@ def registration(message):
     registration_menu = types.ReplyKeyboardMarkup(True, True)
     mycol = mydb["registration_on_flight"]
     for x in mycol.find():
-        registration_menu.row(x['Рейс'])
+        registration_menu.row(x['Дата'])
     bot.register_next_step_handler(message, cv)
     bot.send_message(message.chat.id, "Выберите рейс",
                      reply_markup=registration_menu)
@@ -66,7 +66,7 @@ def decline_flight(message):
     registration_menu = types.ReplyKeyboardMarkup(True, True)
     mycol = mydb["registration_on_flight"]
     for x in mycol.find():
-        registration_menu.row(x['Рейс'])
+        registration_menu.row(x['Дата'])
     bot.register_next_step_handler(message, cv)
     bot.send_message(message.chat.id, "Выберите рейс",
                      reply_markup=registration_menu)
@@ -82,7 +82,7 @@ def map_luggage(message):
     }
     tablo =''
     for x in mycol.find({}, projection):
-        tablo = ' | '+'Номер рейса '+str(x['Рейс'])+' '+str(x['Пассажиры'])
+        tablo = ' | '+'Номер рейса '+str(x['Рейс'])+' '+str(x['Дата'])+' '+str(x['Пассажиры'])
         bot.send_message(message.chat.id, tablo,reply_markup=reg_menu1)
 
 
@@ -96,7 +96,9 @@ def fligths(message):
         "idAircraft": 0
     }
     tablo =''
-    for x in mycol.find({}, projection):
+    date = str(datetime.date.today())
+    date = date[8]+date[9]+'/'+date[5]+date[6]+'/'+date[0]+date[1]+date[2]+date[3]
+    for x in mycol.find({'Дата': {'$eq' : date }}, projection):
         tablo = ' | '+'Номер рейса '+str(x['idFlights '])+' | '+'Дата '+str(x['Data '])+' | '+'Аэропорт вылета '+str(x['Airport_out '])+' | '+'Аэропорт прилета '+str(x['Airport_in '])+' | '+'Компания '+str(x['Company'])+' | '
         bot.send_message(message.chat.id, tablo,reply_markup=flights_menu)
     
